@@ -1,4 +1,4 @@
-package pkg.spring.basic.dao;
+package pkg.spring.basic.dao.impl;
 
 import pkg.spring.basic.dao.UserInfoDAO;
 import org.springframework.beans.factory.annotation.Autowired;

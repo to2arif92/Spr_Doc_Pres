@@ -24,11 +24,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!-- //web font -->
 </head>
 <body>
-<h1>Credit Login / Register Form</h1>
+<h1>Doctors Prescription</h1>
 <div class="main-agileits">
 <!--form-stars-here-->
 		<div class="form-w3-agile">
-			<h2>Credit login form</h2>
+			<h2>Please Login & Identify</h2>
 			<form action="#" method="post">
 				<div class="form-sub-w3">
 					<input type="text" name="Username" placeholder="Customer number or username " required="" />
@@ -42,7 +42,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<i class="fa fa-unlock-alt" aria-hidden="true"></i>
 				</div>
 				</div>
-				<p class="p-bottom-w3ls">Are you new to eBanking?<a class="w3_play_icon1" href="#small-dialog1">  Register here</a></p>
+				<p class="p-bottom-w3ls">Are you new here?<a class="w3_play_icon1" href="#small-dialog1">   Register here</a></p>
 				
 				<div class="submit-w3l">
 					<input type="submit" value="Login">

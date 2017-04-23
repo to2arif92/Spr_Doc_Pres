@@ -13,6 +13,7 @@ public class DefaultController {
     public String index(Model model)
     {
         System.out.println("- method invoked: DefaultController");
-        return "index";
+        //return "index";
+        return "loginPage"; //default page for now
     }
 }

@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -25,11 +27,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter{
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
-        stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "plain", UTF8)));
-        converters.add(stringConverter);
+
+        // HTTP
+        converters.add(new StringHttpMessageConverter());
+
+        // JSON
+        converters.add(new MappingJackson2HttpMessageConverter());
+        System.out.println("MappingJackson2HttpMessageConverter added");
+
+        // XML
+        converters.add(new MappingJackson2XmlHttpMessageConverter());
 
         // Add other converters ...
+
     }
 
 
@@ -39,6 +49,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter{
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/fonts/**").addResourceLocations("/fonts/");
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+        // {appContext}/js/x.js is now mapped with this path '/WEB-INF/resources/js/x.js'
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
     }
 

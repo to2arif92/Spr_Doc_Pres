@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface UserInfoDAO {
 
-    public UserInfo getUserInfo(String userName);
+    public UserInfo findUserInfo(String userName);
 
     List<String> getUserRoles(String userName);
 }

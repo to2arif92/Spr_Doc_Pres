@@ -14,6 +14,9 @@ public class Product {
     double buyPrice;
     double MSRP;
 
+    public Product() {
+    }
+
     public Product(String productCode, String productName, String productLine, String productScale, String productVendor, String productDescription, int quantityInStock, double buyPrice, double MSRP) {
         this.productCode = productCode;
         this.productName = productName;
@@ -97,4 +100,6 @@ public class Product {
     public void setMSRP(double MSRP) {
         this.MSRP = MSRP;
     }
+
+
 }

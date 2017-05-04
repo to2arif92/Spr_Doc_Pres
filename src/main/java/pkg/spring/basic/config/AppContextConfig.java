@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import pkg.spring.basic.dao.UserInfoDAO;
 
 import javax.sql.DataSource;
 
@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 // Load to Environment
 @PropertySource("classpath:datasource-cfg.properties")
-public class AppContextConfig{
+public class AppContextConfig {
 
     // The Environment class serves as the property holder
     // and stores all the properties loaded by the @PropertySource
@@ -34,7 +34,7 @@ public class AppContextConfig{
     private UserInfoDAO userInfoDAO;*/
 
     @Bean(name = "viewResolver")
-    public InternalResourceViewResolver getViewResolver(){
+    public InternalResourceViewResolver getViewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/pages/");
         viewResolver.setSuffix(".jsp");
@@ -42,10 +42,16 @@ public class AppContextConfig{
     }
 
     @Bean
-    public ResourceBundleMessageSource messageSource(){
+    public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource rb = new ResourceBundleMessageSource();
         rb.setBasenames(new String[]{"messages/validator"});
         return rb;
+    }
+
+    // to get rid instantiating JdbcTemplate elsewhere
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource){
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean(name = "dataSource")
@@ -71,7 +77,6 @@ public class AppContextConfig{
 
         return transactionManager;
     }
-
 
 
 }

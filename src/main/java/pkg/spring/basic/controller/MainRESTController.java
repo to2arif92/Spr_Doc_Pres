@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pkg.spring.basic.dao.ProductDAO;
+import pkg.spring.basic.dao.ProductDAOjdbc;
 import pkg.spring.basic.model.Product;
 
 import java.util.List;
@@ -18,9 +19,11 @@ import java.util.List;
 public class MainRESTController {
     @Autowired
     private ProductDAO productDAO;
-
+    @Autowired
+    ProductDAOjdbc productDAOjdbc;
     @RequestMapping("/dd")
     public String welcome() {
+        productDAOjdbc.addProduct(new Product("E01", "Smith", "Clerk", "ds", "ads", "wq",12, 12, 2.1));
         return "Welcome to RestTemplate Example.";
     }
 

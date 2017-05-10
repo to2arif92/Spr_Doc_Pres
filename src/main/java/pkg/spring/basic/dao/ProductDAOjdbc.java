@@ -11,8 +11,9 @@ import java.util.List;
 public interface ProductDAOjdbc {
     //void setDataSource(DataSource ds);
     void addProduct(Product product);
-    List<Product> findProducts(String pId);
+    void updateProduct(Product product);
+    List<Product> findProducts(String productId);
     List<Product> getAllProducts();
-    void removeProduct(String pId);
+    void removeProduct(String productId);
     void removeAllProducts();
 }

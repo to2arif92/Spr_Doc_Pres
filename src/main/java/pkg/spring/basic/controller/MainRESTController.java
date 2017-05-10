@@ -23,46 +23,45 @@ public class MainRESTController {
     ProductDAOjdbc productDAOjdbc;
     @RequestMapping("/dd")
     public String welcome() {
-        productDAOjdbc.addProduct(new Product("E01", "Smith", "Clerk", "ds", "ads", "wq",12, 12, 2.1));
+        //productDAOjdbc.addProduct(new Product("E01", "Smith", "Clerk", "ds", "ads", "wq",12, 12, 2.1));
         return "Welcome to RestTemplate Example.";
     }
 
-    @RequestMapping(value = "/employees", //
+    @RequestMapping(value = "/products", //
             method = RequestMethod.GET, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<Product> getEmployees() {
-        List<Product> list = productDAO.getProductList();
-        return list;
+    public List<Product> getProducts() {
+        return productDAOjdbc.getAllProducts();
     }
 
-    @RequestMapping(value = "/employees/{empNo}", //
+    @RequestMapping(value = "/products/{productId}", //
             method = RequestMethod.GET, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 
-    public Product getEmployee(@PathVariable("empNo") String empNo) {
-        return productDAO.getProduct(empNo);
+    public List<Product> getProduct(@PathVariable("productId") String productId) {
+        return productDAOjdbc.findProducts(productId);
     }
 
-    @RequestMapping(value = "/employees", //
+    @RequestMapping(value = "/products", //
             method = RequestMethod.POST, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 
-    public Product addEmployee(Product emp) {
-        return productDAO.addProduct(emp);
+    public void addProduct(Product product) {
+        productDAOjdbc.addProduct(product);
     }
 
-    @RequestMapping(value = "/employees", //
+    @RequestMapping(value = "/products", //
             method = RequestMethod.PUT, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public Product updateEmployee(Product emp) {
+    public Product updateProduct(Product emp) {
         return productDAO.updateProduct(emp);
     }
 
-    @RequestMapping(value = "/employees/{empNo}", //
+    @RequestMapping(value = "/products/{productId}", //
             method = RequestMethod.DELETE, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public void deleteEmployee(@PathVariable("empNo") String empNo) {
-        productDAO.deleteProduct(empNo);
+    public void deleteProduct(@PathVariable("productId") String productId) {
+        productDAOjdbc.removeProduct(productId);
     }
 
 }

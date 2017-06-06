@@ -20,7 +20,11 @@
     <!-- Custom styling plus plugins -->
     <link href="css/ad/custom.css" rel="stylesheet">
     <link href="css/ad/icheck/flat/green.css" rel="stylesheet">
-    <link href="css/ad/datatables/tools/css/dataTables.tableTools.css" rel="stylesheet">
+    <%-- Backgrid --%>
+    <link rel="stylesheet" href="css/backgrid/backgrid.css">
+    <link rel="stylesheet" href="css/backgrid/backgrid-select-all.css">
+    <link rel="stylesheet" href="css/backgrid/backgrid-paginator.css">
+    <link rel="stylesheet" href="css/backgrid/backgrid-filter.css">
 
     <script src="js/ad/jquery.min.js"></script>
 
@@ -238,7 +242,7 @@
                                     <li>
                                         <a href="javascript:;">Help</a>
                                     </li>
-                                    <li><a href="../login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                    <li><a href="${pageContext.request.contextPath}/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                     </li>
                                 </ul>
                             </li>
@@ -408,6 +412,7 @@
                                         </tbody>
 
                                     </table>
+                                    <div id="example-2-result" class="backgrid-container"></div>
                                 </div>
                             </div>
                         </div>
@@ -454,120 +459,108 @@
 
         <script src="js/ad/custom.js"></script>
 
-
-        <!-- Datatables -->
-        <script src="js/ad/datatables/js/jquery.dataTables.js"></script>
-        <!--<script src="../js/datatables/tools/js/dataTables.tableTools.js"></script>-->
-        
         <!-- pace -->
         <script src="js/ad/pace/pace.min.js"></script>
+
+
+    <script src="js/lib/underscore/underscore.js"></script>
+    <script src="js/lib/backbone/backbone.js"></script>
+    <script src="js/lib/backbone/backbone-pageable.js"></script>
+    <script src="js/lib/backgrid/backgrid.js"></script>
+    <script src="js/lib/backgrid/backgrid-select-all.js"></script>
+    <script src="js/lib/backgrid/backgrid-paginator.js"></script>
+    <script src="js/lib/backgrid/backgrid-filter.js"></script>
     <script>
-        $(document).ready(function () {
-            /*$('#tableID').DataTable( {
-             "ajax": {
-             "url": "/ecom/admin-panel/productManagement",
-             "dataSrc": ""
-             },
-             "columns": [
-             { "data": "productName" },
-             { "data": "productLine" },
-             { "data": "productVendor" },
-             { "data": "quantityInStock" },
-             { "data": "buyPrice" },
-             { "data": "MSRP" },
-             { "data": "<a href='#'>Edit</a>"}
-             ]
-             } );*/
-            var oTable = $('#tableID').DataTable({
-                "oLanguage": {
-                    "sSearch": "Search all columns:"
-                },
-                "aoColumnDefs": [
-                    {
-                        "sClass": "tableflat",
-                        'bSortable': false,
-                        'aTargets': [0]
-                    } //disables sorting for column one
-                ],
-                'iDisplayLength': 10,
-                "sPaginationType": "full_numbers",
-                "dom": 'T<"clear">lfrtip',
-                "tableTools": {
-                    "sSwfPath": "<?php echo base_url('assets2/js/Datatables/tools/swf/copy_csv_xls_pdf.swf'); ?>"
-                }
-            });
+    $(function() {
 
-            $("tfoot input").keyup(function () {
-                /* Filter on the column based on the index of this element's parent <th> */
-                oTable.fnFilter(this.value, $("tfoot th").index($(this).parent()));
-            });
-            $("tfoot input").each(function (i) {
-                asInitVals[i] = this.value;
-            });
-            $("tfoot input").focus(function () {
-                if (this.className == "search_init") {
-                    this.className = "";
-                    this.value = "";
-                }
-            });
-            $("tfoot input").blur(function (i) {
-                if (this.value == "") {
-                    this.className = "search_init";
-                    this.value = asInitVals[$("tfoot input").index(this)];
-                }
-            });
+    var Territory = Backbone.Model.extend({});
 
-            $.ajax({
-                type : 'POST',
-                data : {
-                    user : '',
-                    action : 'products'
-                },
-                contentType:"application/json; charset=utf-8",
-                url : '/ecom/admin-panel/productManagement',
-                success: function (json, status, xhr) {
-                    // varify logout success
-                    var msg = xhr.getResponseHeader('varificationStatus'),
-                        jsonString = xhr.getResponseHeader("json"),
-                        appName = "ecom";
-                    console.log(json);
-                    console.log(jsonString);
-                    var checkbox = $("<input>").attr("class", "tableflat");
-                    $.each(json, function (arrayIndex, indexContent) {
-                        //var user = indexContent;
-                        //console.log(indexContent.productName);
-                        /*var session_status_readable = "";
-                         if (indexContent.session_status === "0"){
-                         session_status_readable = "Offline";
-                         } else if (indexContent.session_status === "1"){
-                         session_status_readable = "Online";
-                         }*/
-                        //console.log(session_status_readable);
-                        oTable.row.add( [
-                            "<input type='checkbox' class='tableflat'>",
-                            indexContent.productName,
-                            indexContent.productLine,
-                            indexContent.productVendor,
-                            indexContent.quantityInStock,
-                            indexContent.buyPrice,
-                            indexContent.MSRP,
-                            "<a href='#'>Edit</a>"
-                        ] ).draw( false );
-                    });
-                }
-            });
+    var columns = [{
+        name: "id", // The key of the model attribute
+        label: "ID", // The name to display in the header
+        editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
+        // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
+        cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+        })
+    }, {
+        name: "productName",
+        label: "Name",
+        // The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
+        cell: "string" // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
+    }, {
+        name: "productLine",
+        label: "Product Line",
+        cell: "string"
+    }, {
+        name: "productVendor",
+        label: "Vendor",
+        cell: "string"
+    }, {
+        name: "quantityInStock",
+        label: "InStock",
+        cell: "integer" // An integer cell is a number cell that displays humanized integers
+    }, {
+        name: "buyPrice",
+        label: "Price",
+        cell: "number" // Number cell type for floating point value, defaults to have a precision 2 decimal numbers
+    }, {
+        name: "msrp",
+        label: "MRSP",
+        cell: "number" // Renders the value in an HTML anchor element
+    }];
 
-            $('input.tableflat').iCheck({
-                checkboxClass: 'icheckbox_flat-green',
-                radioClass: 'iradio_flat-green'
-            });
+        var PageableTerritories = Backbone.PageableCollection.extend({
+            model: Territory,
+            url: "products.json",
+            state: {
+                pageSize: 15
+            },
+            mode: "client" // page entirely on the client side
         });
 
-        var asInitVals = new Array();
-        $(document).ready(function () {
+        var pageableTerritories = new PageableTerritories();
 
+    // Set up a grid to use the pageable collection
+        var pageableGrid = new Backgrid.Grid({
+            columns: [{
+                // enable the select-all extension
+                name: "",
+                cell: "select-row",
+                headerCell: "select-all"
+            }].concat(columns),
+            collection: pageableTerritories
         });
 
+    // Render the grid
+        var $example2 = $("#example-2-result");
+        $example2.append(pageableGrid.render().el)
+
+    // Initialize the paginator
+        var paginator = new Backgrid.Extension.Paginator({
+            collection: pageableTerritories
+        });
+
+    // Render the paginator
+        $example2.after(paginator.render().el);
+
+    // Initialize a client-side filter to filter on the client
+    // mode pageable collection's cache.
+        var filter = new Backgrid.Extension.ClientSideFilter({
+            collection: pageableTerritories,
+            fields: ['productName', 'productVendor']
+        });
+
+    // Render the filter
+        $example2.before(filter.render().el);
+
+    // Add some space to the filter and move it to the right
+        $(filter.el).css({float: "right", margin: "20px"});
+
+    // Fetch some data
+        pageableTerritories.fetch({reset: true});
+
+    });
     </script>
 </body>
 

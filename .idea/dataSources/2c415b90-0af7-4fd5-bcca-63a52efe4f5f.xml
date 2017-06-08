@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - test@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.1">
+    <root id="1"/>
+    <schema id="2" parent="1" name="test">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="cdcol"/>
+    <schema id="4" parent="1" name="classicmodels"/>
+    <schema id="5" parent="1" name="crm"/>
+    <schema id="6" parent="1" name="db"/>
+    <schema id="7" parent="1" name="employees"/>
+    <schema id="8" parent="1" name="e_commerce"/>
+    <schema id="9" parent="1" name="information_schema"/>
+    <schema id="10" parent="1" name="i_mail"/>
+    <schema id="11" parent="1" name="login_db"/>
+    <schema id="12" parent="1" name="mysql"/>
+    <schema id="13" parent="1" name="performance_schema"/>
+    <schema id="14" parent="1" name="phpmyadmin"/>
+    <schema id="15" parent="1" name="sakila"/>
+    <schema id="16" parent="1" name="webauth"/>
+    <schema id="17" parent="1" name="wordpress"/>
+    <table id="18" parent="2" name="products">
+      <Comment>Product_Lines&gt; Products &lt;OrderDetails</Comment>
+    </table>
+    <table id="19" parent="2" name="user_roles"/>
+    <table id="20" parent="2" name="users"/>
+    <column id="21" parent="18" name="product_code">
+      <Position>1</Position>
+      <DataType>varchar(15)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="22" parent="18" name="product_name">
+      <Position>2</Position>
+      <DataType>varchar(70)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="23" parent="18" name="product_line">
+      <Position>3</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="24" parent="18" name="product_scale">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="25" parent="18" name="product_vendor">
+      <Position>5</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="26" parent="18" name="product_description">
+      <Position>6</Position>
+      <DataType>text|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="27" parent="18" name="quantity_in_stock">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="18" name="buy_price">
+      <Position>8</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="29" parent="18" name="MSRP">
+      <Position>9</Position>
+      <Comment>Manufacturer&apos;s Suggested Retail Price</Comment>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="30" parent="18" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>product_code</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="31" parent="19" name="ROLE_ID">
+      <Position>1</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="32" parent="19" name="USERNAME">
+      <Position>2</Position>
+      <DataType>varchar(36)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="33" parent="19" name="USER_ROLE">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="34" parent="19" name="USER_ROLE_UK">
+      <ColNames>USERNAME
+USER_ROLE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="35" parent="19" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ROLE_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="36" parent="19" name="USER_ROLE_UK">
+      <ColNames>USERNAME
+USER_ROLE</ColNames>
+      <UnderlyingIndexName>USER_ROLE_UK</UnderlyingIndexName>
+    </key>
+    <column id="37" parent="20" name="USERNAME">
+      <Position>1</Position>
+      <DataType>varchar(36)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="38" parent="20" name="PASSWORD">
+      <Position>2</Position>
+      <DataType>varchar(36)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="39" parent="20" name="ENABLED">
+      <Position>3</Position>
+      <DataType>smallint(6)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="40" parent="20" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>USERNAME</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>

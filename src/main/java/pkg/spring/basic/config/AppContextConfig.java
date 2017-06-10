@@ -48,12 +48,6 @@ public class AppContextConfig {
         return rb;
     }
 
-    // to get rid instantiating JdbcTemplate elsewhere
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource){
-        return new JdbcTemplate(dataSource);
-    }
-
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -67,6 +61,14 @@ public class AppContextConfig {
         System.out.println("## getDataSource: " + dataSource);
 
         return dataSource;
+    }
+
+    
+
+    // to get rid instantiating JdbcTemplate elsewhere
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource){
+        return new JdbcTemplate(dataSource);
     }
 
     // Transaction Manager

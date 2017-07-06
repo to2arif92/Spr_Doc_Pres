@@ -1,5 +1,8 @@
 package pkg.spring.basic.config;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,8 +25,10 @@ import javax.sql.DataSource;
 @ComponentScan("pkg.spring.basic")
 @EnableTransactionManagement
 // Load to Environment
-@PropertySource("classpath:datasource-cfg.properties")
+@PropertySource("classpath:database.properties")
 public class AppContextConfig {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     // The Environment class serves as the property holder
     // and stores all the properties loaded by the @PropertySource
@@ -50,15 +55,15 @@ public class AppContextConfig {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        HikariDataSource dataSource = new HikariDataSource();
 
         // See: datasouce-cfg.properties
         dataSource.setDriverClassName(env.getProperty("ds.database-driver"));
-        dataSource.setUrl(env.getProperty("ds.url"));
+        dataSource.setJdbcUrl(env.getProperty("ds.url"));
         dataSource.setUsername(env.getProperty("ds.username"));
         dataSource.setPassword(env.getProperty("ds.password"));
 
-        System.out.println("## getDataSource: " + dataSource);
+        logger.info("###### getaSource: " + dataSource);
 
         return dataSource;
     }

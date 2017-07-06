@@ -22,7 +22,7 @@
         <spring.security-version>4.2.2.RELEASE</spring.security-version>
         <hibernate.version>5.2.10.Final</hibernate.version>
         <log4j-version>2.8.2</log4j-version>
-        <jackson-version>2.8.8</jackson-version>
+        <jackson-version>2.8.9</jackson-version>
     </properties>
 
     <dependencies>
@@ -164,6 +164,13 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <!-- To read YAML file i.e. config file -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${jackson-version}</version>
         </dependency>
 

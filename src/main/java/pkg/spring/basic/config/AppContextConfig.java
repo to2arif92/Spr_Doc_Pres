@@ -1,6 +1,8 @@
 package pkg.spring.basic.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.hibernate.Hibernate;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Created by ArIF on 28-Mar-17.
@@ -63,7 +67,7 @@ public class AppContextConfig {
         dataSource.setUsername(env.getProperty("ds.username"));
         dataSource.setPassword(env.getProperty("ds.password"));
 
-        logger.info("###### getaSource: " + dataSource);
+        logger.info("## getDataSource: " + dataSource);
 
         return dataSource;
     }
@@ -76,14 +80,45 @@ public class AppContextConfig {
         return new JdbcTemplate(dataSource);
     }
 
-    // Transaction Manager
-    @Autowired
-    @Bean(name = "transactionManager")
-    public DataSourceTransactionManager getTransactionManager(DataSource dataSource) {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
-
-        return transactionManager;
+    private Properties hibernateProperties(){
+        return new Properties() {
+            {
+                /*setProperty("hibernate.hbm2ddl.auto",
+                        env.getProperty("hibernate.hbm2ddl.auto"));*/
+                setProperty("hibernate.dialect",
+                        env.getProperty("hibernate.dialect"));
+                setProperty("hibernate.format_sql",
+                        env.getProperty("hibernate.format_sql"));
+                setProperty("hibernate.show_sql",
+                        env.getProperty("hibernate.show_sql"));
+            }
+        };
     }
+
+    @Bean
+    public SessionFactory sessionFactory(){
+        LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
+        lsfb.setDataSource(getDataSource());
+        lsfb.setPackagesToScan("pkg.spring.basic.entity");
+        lsfb.setHibernateProperties(hibernateProperties());
+        try {
+            lsfb.afterPropertiesSet();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lsfb.getObject();
+    }
+
+    // Transaction Manager
+
+    @Bean(name = "transactionManager")
+    public HibernateTransactionManager transactionManager(){
+        /*HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;*/
+        return new HibernateTransactionManager(sessionFactory());
+    }
+
 
 
 }

@@ -1,8 +1,12 @@
 package pkg.spring.basic.model;
 
+import javax.persistence.*;
+
 /**
  * Created by ArIF on 26-Apr-17.
  */
+@Entity // mark this class as Table & its member as Columns
+@Table(name = "products")
 public class Product {
     String productCode;
     String productName;
@@ -28,7 +32,9 @@ public class Product {
         this.buyPrice = buyPrice;
         this.MSRP = MSRP;
     }
-
+    @Id
+    @Column(name = "productCode")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String getProductCode() {
         return productCode;
     }
@@ -101,5 +107,18 @@ public class Product {
         this.MSRP = MSRP;
     }
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productCode='" + productCode + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productLine='" + productLine + '\'' +
+                ", productScale='" + productScale + '\'' +
+                ", productVendor='" + productVendor + '\'' +
+                ", productDescription='" + productDescription + '\'' +
+                ", quantityInStock=" + quantityInStock +
+                ", buyPrice=" + buyPrice +
+                ", MSRP=" + MSRP +
+                '}';
+    }
 }

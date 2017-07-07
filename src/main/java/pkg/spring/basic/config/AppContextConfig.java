@@ -3,6 +3,7 @@ package pkg.spring.basic.config;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AvailableSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,14 @@ import java.util.Properties;
 @PropertySource("classpath:database.properties")
 public class AppContextConfig {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    //private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Bean
+    public Logger getLogger(){
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        return logger;
+    }
+    @Autowired
+    private Logger logger;
     // The Environment class serves as the property holder
     // and stores all the properties loaded by the @PropertySource
     @Autowired
@@ -59,13 +66,20 @@ public class AppContextConfig {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        HikariDataSource dataSource = new HikariDataSource();
+        /*final */HikariDataSource dataSource = new HikariDataSource();
 
+        // these settings can be achieved through Hibernate properties (recommended)
         // See: datasouce-cfg.properties
         dataSource.setDriverClassName(env.getProperty("ds.database-driver"));
         dataSource.setJdbcUrl(env.getProperty("ds.url"));
         dataSource.setUsername(env.getProperty("ds.username"));
         dataSource.setPassword(env.getProperty("ds.password"));
+        // optional
+        dataSource.setMaximumPoolSize(1);
+        dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
+        dataSource.addDataSourceProperty("cachePrepStmts", true);
+        dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+        dataSource.addDataSourceProperty("useServerPrepStmts", true);
 
         logger.info("## getDataSource: " + dataSource);
 
@@ -85,7 +99,7 @@ public class AppContextConfig {
             {
                 /*setProperty("hibernate.hbm2ddl.auto",
                         env.getProperty("hibernate.hbm2ddl.auto"));*/
-                setProperty("hibernate.dialect",
+                setProperty(AvailableSettings.DIALECT,
                         env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.format_sql",
                         env.getProperty("hibernate.format_sql"));
@@ -99,7 +113,7 @@ public class AppContextConfig {
     public SessionFactory sessionFactory(){
         LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
         lsfb.setDataSource(getDataSource());
-        lsfb.setPackagesToScan("pkg.spring.basic.entity");
+        lsfb.setPackagesToScan("pkg.spring.basic.model"); // model = entity
         lsfb.setHibernateProperties(hibernateProperties());
         try {
             lsfb.afterPropertiesSet();

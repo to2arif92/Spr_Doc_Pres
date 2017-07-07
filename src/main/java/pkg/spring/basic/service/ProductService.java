@@ -1,13 +1,13 @@
-package pkg.spring.basic.dao;
+package pkg.spring.basic.service;
 
 import pkg.spring.basic.model.Product;
 
 import java.util.List;
 
 /**
- * Created by ArIF on 26-Apr-17.
+ * Created by ArIF on 07-Jul-17.
  */
-public interface ProductDAO {
+public interface ProductService {
     void addProduct(Product product);
     void updateProduct(Product product);
     List<Product> findProducts(String productId);

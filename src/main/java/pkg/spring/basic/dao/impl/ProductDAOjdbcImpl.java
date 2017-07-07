@@ -74,6 +74,8 @@ public class ProductDAOjdbcImpl implements ProductDAOjdbc {
     public void updateProduct(Product product) {
         String sql = "";
         Object[] params = new Object[]{};
+        //empMap.put(product.getProductCode(), product);
+        //return null;
     }
 
     @Override

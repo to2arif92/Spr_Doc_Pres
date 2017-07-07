@@ -115,7 +115,6 @@
             <version>${hibernate.version}</version>
         </dependency>
 
-
         <!-- Hibernate/HikariCP Integration -->
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-hikaricp -->
         <dependency>

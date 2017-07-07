@@ -1,37 +1,31 @@
-package pkg.spring.basic.dao.impl;
+package pkg.spring.basic.service.impl;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pkg.spring.basic.dao.ProductDAO;
 import pkg.spring.basic.model.Product;
+import pkg.spring.basic.service.ProductService;
 
 import java.util.List;
 
 
 /**
- * Created by ArIF on 26-Apr-17.
+ * Created by ArIF on 07-Jul-17.
  */
-@Repository
-public class ProductDAOImpl implements ProductDAO {
+@Service
+public class ProductServiceImpl implements ProductService {
+
     @Autowired
     private Logger logger;
 
-    // get the configured SessionFactory bean
     @Autowired
-    private SessionFactory sessionFactory;
-
-    // ??
-    protected Session getSession(){
-        return this.sessionFactory.getCurrentSession();
-    }
+    ProductDAO productDAO;
 
     @Override
     public void addProduct(Product product) {
-        getSession().persist(product);
-        logger.info("Product saved successfully");
+
     }
 
     @Override
@@ -40,16 +34,16 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
+    //@Transactional
     public List<Product> findProducts(String productId) {
-
         return null;
     }
 
     @Override
+    @Transactional
     public List<Product> getAllProducts() {
-        List<Product> productList = getSession().createQuery("from Product").list();
-        logger.info("Received all Products");
-        return productList;
+        logger.info("Getting all Products");
+        return this.productDAO.getAllProducts();
     }
 
     @Override

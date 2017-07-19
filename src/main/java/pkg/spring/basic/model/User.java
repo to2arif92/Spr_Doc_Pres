@@ -1,7 +1,6 @@
 package pkg.spring.basic.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,7 +10,7 @@ import java.util.Date;
  * Created by ArIF on 10-Jun-17.
  */
 
-@Entity
+//@Entity
 @Table(name = "User_Table")
 public class User {
 
@@ -19,6 +18,7 @@ public class User {
     @GeneratedValue
     @Column(name = "U_ID")
     private Long id;
+    @Column(name = "U_Password")
     private String userPassword;
     private String userName;
     private boolean userStatus;
@@ -45,7 +45,6 @@ public class User {
         this.id = id;
     }
 
-    @Column(name = "U_Password")
     public String getUserPassword() {
         return userPassword;
     }

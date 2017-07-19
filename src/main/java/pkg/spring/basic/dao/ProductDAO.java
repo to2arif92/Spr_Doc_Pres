@@ -10,8 +10,10 @@ import java.util.List;
 public interface ProductDAO {
     void addProduct(Product product);
     void updateProduct(Product product);
+    void updateProductByID(String productId, Product product);
     List<Product> findProducts(String productId);
-    List<Product> getAllProducts();
-    void removeProduct(String productId);
+    Product findProductById(String productCode);
+    List<Product> findAllProducts();
+    void removeProductById(String productId);
     void removeAllProducts();
 }

@@ -38,6 +38,7 @@ public class ProductDAOjdbcImpl implements ProductDAOjdbc {
 
     @Override
     public void addProduct(Product product) {
+        logger.info("s  "+product);
         String sql = "INSERT INTO products (" +
                 "product_code,  " +
                 "product_name,  " +

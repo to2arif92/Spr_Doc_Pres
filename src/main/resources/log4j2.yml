@@ -43,7 +43,7 @@ Configutation:
       Logger:
         - name: pkg.spring.basic
           additivity: false
-          level: info
+          level: debug
           AppenderRef:
             - ref: Console_Appender
               level: info
@@ -51,3 +51,7 @@ Configutation:
               level: error
             - ref: RollingFile_Appender
               level: debug
+        - name: org.hibernate
+          level: info
+        - name: org.hibernate.type
+          level: ALL

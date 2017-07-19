@@ -22,7 +22,9 @@ public class SpringWebAppInitializer implements WebApplicationInitializer{
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
         //
         applicationContext.register(AppContextConfig.class);
-
+        // below 2 are added to make @PropertySources/ multi properties file to work
+        applicationContext.setServletContext(servletContext);
+        applicationContext.refresh();
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("SpringDispatcher", new DispatcherServlet(applicationContext));
         dispatcher.setLoadOnStartup(1);

@@ -24,13 +24,17 @@ public class ProductServiceImpl implements ProductService {
     ProductDAO productDAO;
 
     @Override
+    @Transactional
     public void addProduct(Product product) {
-
+        logger.info("Adding in process");
+        productDAO.addProduct(product);
     }
 
     @Override
-    public void updateProduct(Product product) {
-
+    @Transactional
+    public Product findProductById(String productCode) {
+        logger.info("Find in process");
+        return productDAO.findProductById(productCode);
     }
 
     @Override
@@ -41,18 +45,39 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public List<Product> getAllProducts() {
+    public List<Product> findAllProducts() {
         logger.info("Getting all Products");
-        return this.productDAO.getAllProducts();
+        return this.productDAO.findAllProducts();
     }
 
     @Override
-    public void removeProduct(String productId) {
-
+    //@Transactional
+    /*  NOTE: seemed un-necessary, inefficient thus un-implemented */
+    public void updateProductByID(String productId, Product product) {
+        logger.info("Target Update in process");
+        productDAO.updateProductByID(productId, product);
+        //Product product = productDAO.findProductById(productId);
+        //productDAO.updateProduct(product);
     }
 
     @Override
+    @Transactional
+    public void updateProduct(Product product) {
+        logger.info("Update in process");
+        productDAO.updateProduct(product);
+    }
+
+    @Override
+    @Transactional
+    public void removeProductById(String productId) {
+        logger.info("Deleting in process");
+        productDAO.removeProductById(productId);
+        logger.info("Product Removed !");
+    }
+
+    @Override
+    @Transactional
     public void removeAllProducts() {
-
+        productDAO.removeAllProducts();
     }
 }

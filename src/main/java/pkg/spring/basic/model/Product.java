@@ -1,22 +1,25 @@
 package pkg.spring.basic.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by ArIF on 26-Apr-17.
  */
-@Entity // mark this class as Table & its member as Columns
+@Entity // mark this class as Table & its field member as Columns
 @Table(name = "products")
 public class Product {
-    String productCode;
-    String productName;
-    String productLine;
-    String productScale;
-    String productVendor;
-    String productDescription;
-    int quantityInStock;
-    double buyPrice;
-    double MSRP;
+    private String productCode;
+    private String productName;
+    private String productLine;
+    private String productScale;
+    private String productVendor;
+    private String productDescription;
+    private int quantityInStock;
+    private double buyPrice;
+    private double MSRP;
 
     public Product() {
     }
@@ -34,7 +37,7 @@ public class Product {
     }
     @Id
     @Column(name = "productCode")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     public String getProductCode() {
         return productCode;
     }

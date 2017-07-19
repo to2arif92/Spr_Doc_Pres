@@ -1,7 +1,7 @@
 package pkg.spring.basic.config;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.slf4j.Logger;
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -30,14 +30,20 @@ import java.util.Properties;
 @ComponentScan("pkg.spring.basic")
 @EnableTransactionManagement
 // Load to Environment
-@PropertySource("classpath:database.properties")
+/*@PropertySource({
+        "classpath:hibernateCustom.properties",
+        "classpath:hikari.properties"
+})*/
+@PropertySources({
+        @PropertySource("classpath:hibernateCustom.properties"),
+        @PropertySource("classpath:hikari.properties")
+})
 public class AppContextConfig {
 
     //private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Bean
     public Logger getLogger(){
-        Logger logger = LoggerFactory.getLogger(this.getClass());
-        return logger;
+        return LoggerFactory.getLogger(this.getClass());
     }
     @Autowired
     private Logger logger;
@@ -60,27 +66,23 @@ public class AppContextConfig {
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource rb = new ResourceBundleMessageSource();
-        rb.setBasenames(new String[]{"messages/validator"});
+        rb.setBasenames("messages/validator");  // use new String[]{} if multiple path
         return rb;
     }
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        /*final */HikariDataSource dataSource = new HikariDataSource();
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName(env.getProperty("dataSource.driverClassName"));// Use it if not works
+        config.setJdbcUrl(env.getProperty("dataSource.jdbcUrl"));
+        config.setUsername(env.getProperty("dataSource.user"));
+        config.setPassword(env.getProperty("dataSource.password"));
 
-        // these settings can be achieved through Hibernate properties (recommended)
-        // See: datasouce-cfg.properties
-        dataSource.setDriverClassName(env.getProperty("ds.database-driver"));
-        dataSource.setJdbcUrl(env.getProperty("ds.url"));
-        dataSource.setUsername(env.getProperty("ds.username"));
-        dataSource.setPassword(env.getProperty("ds.password"));
-        // optional
-        dataSource.setMaximumPoolSize(1);
-        dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
-        dataSource.addDataSourceProperty("cachePrepStmts", true);
-        dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-        dataSource.addDataSourceProperty("useServerPrepStmts", true);
+        /*config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");*/
 
+        HikariDataSource dataSource = new HikariDataSource(config);
         logger.info("## getDataSource: " + dataSource);
 
         return dataSource;
@@ -95,42 +97,56 @@ public class AppContextConfig {
     }
 
     private Properties hibernateProperties(){
-        return new Properties() {
+        // convert this anonymous class into lamda exp
+        Properties properties = new Properties();
+        properties.setProperty(AvailableSettings.DIALECT,
+                env.getProperty("hibernate.dialect"));
+
+        properties.setProperty("hibernate.format_sql",
+                env.getProperty("hibernate.format_sql"));
+        properties.setProperty("hibernate.show_sql",
+                env.getProperty("hibernate.show_sql"));
+        properties.setProperty(AvailableSettings.HBM2DDL_AUTO,
+                env.getProperty("hibernate.hbm2ddl.auto"));
+        /*return new Properties() {
             {
-                /*setProperty("hibernate.hbm2ddl.auto",
-                        env.getProperty("hibernate.hbm2ddl.auto"));*/
+                *//*setProperty("hibernate.hbm2ddl.auto",
+                        env.getProperty("hibernate.hbm2ddl.auto"));*//*
                 setProperty(AvailableSettings.DIALECT,
                         env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.format_sql",
                         env.getProperty("hibernate.format_sql"));
                 setProperty("hibernate.show_sql",
                         env.getProperty("hibernate.show_sql"));
+                setProperty(AvailableSettings.HBM2DDL_AUTO,
+                        env.getProperty("hibernate.hbm2ddl.auto"));*//*
+                setProperty(AvailableSettings.CONNECTION_PROVIDER,
+                        env.getProperty("hibernate.connection.provider_class"));*//*
+                *//*setProperty(AvailableSettings.AUTOCOMMIT,
+                        env.getProperty("hibernate.connection.autocommit"));*//*
             }
-        };
+        };*/
+        return properties;
     }
 
     @Bean
-    public SessionFactory sessionFactory(){
+    public LocalSessionFactoryBean sessionFactory(){
         LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
         lsfb.setDataSource(getDataSource());
-        lsfb.setPackagesToScan("pkg.spring.basic.model"); // model = entity
+        lsfb.setPackagesToScan("pkg.spring.basic.model");
         lsfb.setHibernateProperties(hibernateProperties());
-        try {
-            lsfb.afterPropertiesSet();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lsfb.getObject();
+
+        return lsfb;
     }
 
-    // Transaction Manager
+// Transaction Manager
 
     @Bean(name = "transactionManager")
-    public HibernateTransactionManager transactionManager(){
-        /*HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+    @Autowired  // sessionFactory
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory){
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory);
-        return transactionManager;*/
-        return new HibernateTransactionManager(sessionFactory());
+        return transactionManager;
     }
 
 

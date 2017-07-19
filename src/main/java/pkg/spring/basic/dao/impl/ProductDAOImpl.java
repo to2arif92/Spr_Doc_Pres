@@ -23,20 +23,43 @@ public class ProductDAOImpl implements ProductDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-    // ??
-    protected Session getSession(){
+    // to get rid of instantiating Session obj in all methods
+    private Session getSession(){
         return this.sessionFactory.getCurrentSession();
     }
 
     @Override
     public void addProduct(Product product) {
+        logger.info(" ...saving");
+        // insert Product entity into the session
+        /*Session session = this.sessionFactory.getCurrentSession();
+        session.persist(product);*/
         getSession().persist(product);
-        logger.info("Product saved successfully");
+    }
+
+    @Override
+    public void updateProductByID(String productCode, Product product) {
+        logger.info(" ...updating by: "+productCode);
+        //getSession().merge(findProductById(productCode));
+        Product p = getSession().get(Product.class, productCode);
+        getSession().update(product);
+        Product product1 = getSession().get(Product.class, productCode);
+        logger.info(""+ product1.getProductName()+"f    :"+product.getProductName());
     }
 
     @Override
     public void updateProduct(Product product) {
+        logger.info(" ...updating");
+        getSession().saveOrUpdate("Product", product);  // here, 'Product' is class name
+    }
 
+    @Override
+    public Product findProductById(String productCode) {
+        logger.info(" ...searching by: "+productCode);
+        //logger.info("is open : "+getSession().isOpen());
+        //logger.info("fssssssss"+getSession().getTransaction().isActive());
+        //return getSession().load(Product.class, productCode); hibernate5Module must be configured/ used
+        return getSession().get(Product.class, productCode);
     }
 
     @Override
@@ -45,20 +68,24 @@ public class ProductDAOImpl implements ProductDAO {
         return null;
     }
 
+    @SuppressWarnings("JpaQlInspection")
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> findAllProducts() {
         List<Product> productList = getSession().createQuery("from Product").list();
         logger.info("Received all Products");
         return productList;
     }
 
     @Override
-    public void removeProduct(String productId) {
-
+    public void removeProductById(String productId) {
+        logger.info(" ...deleting by: "+productId);
+        getSession().remove(findProductById(productId));
     }
 
+    @SuppressWarnings("JpaQlInspection")
     @Override
     public void removeAllProducts() {
-
+        getSession().createQuery("delete from Product").executeUpdate();
+        logger.info("Removed all Products !!");
     }
 }

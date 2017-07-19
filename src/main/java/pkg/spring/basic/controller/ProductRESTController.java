@@ -16,24 +16,26 @@ import java.util.List;
  */
 @RestController
 //@RequestMapping("/products")
-public class MainRESTController {
+/*@RequestMapping(
+        value = "/products",    // suffix/root URI
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = {MediaType.APPLICATION_JSON_VALUE*//*,
+                MediaType.APPLICATION_XML_VALUE*//*}
+)*/
+// @RequestBody and @ResponseBody/@RestController does 'consumes', 'produces' automatically
+public class ProductRESTController {
 
     @Autowired
     Logger logger;
 
     // Raw JDBC with Spring template
-    @Autowired
-    ProductDAOjdbc productDAOjdbc;
+    /*@Autowired
+    ProductDAOjdbc productDAOjdbc;*/
 
     // Spring managed Transaction + Hibernate
     @Autowired
     ProductService productService;
 
-    /*@Autowired(required=true)
-    @Qualifier(value="productService")
-    public void setPersonService(ProductService ps){
-        this.ProductService = ps;
-    }*/
 
     /*  Test Rest   */
     @RequestMapping("/dd")
@@ -41,13 +43,12 @@ public class MainRESTController {
         //productDAOjdbc.addProduct(new Product("E01", "Smith", "Clerk", "ds", "ads", "wq",12, 12, 2.1));
         return "Welcome to RestTemplate Example.";
     }
-    /*-----  C   */
-    /*  Create a new Product    */
-    @RequestMapping(value = "/products", //
-            method = RequestMethod.POST, //
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 
+
+
+    /*-----  C   -----*/
+    /*  Create a new Product    */
+    @PostMapping("/products")   // equals to "/products/" if was not defined at class lvl
     public void addProduct(@RequestBody Product product/*, HttpServletRequest request, HttpServletResponse response*/) {
         if (product != null){
             logger.info("REST - Create: "+ product);
@@ -64,43 +65,30 @@ public class MainRESTController {
         response.setHeader("Location", request.getRequestURL().append(product.getProductCode()).toString());*/
     }
 
-    /*-----  R   */
+
+
+    /*-----  R   -----*/
     /*  Read a specific Product */
-    @RequestMapping(value = "/products/{productId}", //
-            method = RequestMethod.GET,/*
-            consumes = MediaType.APPLICATION_JSON_VALUE,*/
-            produces = { MediaType.APPLICATION_JSON_VALUE/*, MediaType.APPLICATION_XML_VALUE*/ })
+    @GetMapping("/products/{productId}")
     public Product findProductByID(@PathVariable String productId/*,
                                                 @RequestBody Product product*/) {
         logger.info("REST - Read: "+"/n by: "+productId);
         return productService.findProductById(productId);
-        //logger.info("Product updated successfully");
+        //return productDAOjdbc.findProducts(productId);
     }
 
     /*  Read All Products    */
     //@JsonView
-    @RequestMapping(value = "/products", //
-            method = RequestMethod.GET, //
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<Product> getAllProducts() {
+    @GetMapping("/products")
+    public List<Product> findAllProducts() {
         return productService.findAllProducts();
     }
 
 
-    /*  -> Read a targeted product  */
-    /*@RequestMapping(value = "/products/{productId}", //
-            method = RequestMethod.GET, //
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 
-    public List<Product> getProduct(@PathVariable("productId") String productId) {
-        return productDAOjdbc.findProducts(productId);
-    }*/
-
-    /*-----  U   */
+    /*-----  U   -----*/
     /*  Update a product without specifying 'by which?'    */
-    @PutMapping(value = "/products", //
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @PutMapping("/products")
     public void updateProduct(@RequestBody Product product) {
         //productDAOjdbc.updateProduct(product);
         logger.info("REST - Update: "+ product);
@@ -110,9 +98,7 @@ public class MainRESTController {
 
     /*  Update a specific product by Id (which is for sure faster?) */
     /*  NOTE: seemed un-necessary, inefficient thus un-implemented */
-    @PutMapping(value = "/products/{productId}", //
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @PutMapping("/products/{productId}")
     public void updateProductByID(@PathVariable String productId,
                                             @RequestBody Product product) {
         logger.info("REST - Update: "+ product+" by: "+productId);
@@ -124,20 +110,16 @@ public class MainRESTController {
 
 
 
-    /*-----  D   */
+    /*-----  D   -----*/
     /*  Delete a product    */
-    @RequestMapping(value = "/products/{productId}", //
-            method = RequestMethod.DELETE, //
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @DeleteMapping("/products/{productId}")
     public void deleteProductById(@PathVariable("productId") String productId) {
         //productDAOjdbc.removeProduct(productId);
         productService.removeProductById(productId);
     }
 
-
     /*  Delete all products    */
-    @RequestMapping(value = "/products", //
-            method = RequestMethod.DELETE)
+    @DeleteMapping("/products/")
     public void deleteAllProducts() {
         productService.removeAllProducts();
     }

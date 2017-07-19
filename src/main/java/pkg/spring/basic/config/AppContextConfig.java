@@ -30,13 +30,9 @@ import java.util.Properties;
 @ComponentScan("pkg.spring.basic")
 @EnableTransactionManagement
 // Load to Environment
-/*@PropertySource({
+@PropertySource({
         "classpath:hibernateCustom.properties",
         "classpath:hikari.properties"
-})*/
-@PropertySources({
-        @PropertySource("classpath:hibernateCustom.properties"),
-        @PropertySource("classpath:hikari.properties")
 })
 public class AppContextConfig {
 

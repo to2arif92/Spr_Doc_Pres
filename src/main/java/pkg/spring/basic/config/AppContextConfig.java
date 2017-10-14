@@ -27,6 +27,7 @@ import java.util.Properties;
  * Created by ArIF on 28-Mar-17.
  */
 @Configuration
+//@configuration or @components e.g. @service spring beans to search for
 @ComponentScan("pkg.spring.basic")
 @EnableTransactionManagement
 // Load to Environment
@@ -66,6 +67,7 @@ public class AppContextConfig {
         return rb;
     }
 
+    // ######### DataSource #########
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
         HikariConfig config = new HikariConfig();
@@ -91,6 +93,8 @@ public class AppContextConfig {
     public JdbcTemplate jdbcTemplate(DataSource dataSource){
         return new JdbcTemplate(dataSource);
     }
+
+    // ######### Hibernate SessionFactory with DataSource #########
 
     private Properties hibernateProperties(){
         // convert this anonymous class into lamda exp
@@ -129,13 +133,14 @@ public class AppContextConfig {
     public LocalSessionFactoryBean sessionFactory(){
         LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
         lsfb.setDataSource(getDataSource());
+        // @Entity to search for
         lsfb.setPackagesToScan("pkg.spring.basic.model");
         lsfb.setHibernateProperties(hibernateProperties());
 
         return lsfb;
     }
 
-// Transaction Manager
+    // ######### Transaction Manager #########
 
     @Bean(name = "transactionManager")
     @Autowired  // sessionFactory

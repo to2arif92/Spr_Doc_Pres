@@ -85,7 +85,7 @@ public class ProductDAOImpl implements ProductDAO {
     @SuppressWarnings("JpaQlInspection")
     @Override
     public void removeAllProducts() {
-        getSession().createQuery("delete from Product").executeUpdate();
+        getSession().createQuery("delete from "+Product.class.getSimpleName()).executeUpdate();
         logger.info("Removed all Products !!");
     }
 }

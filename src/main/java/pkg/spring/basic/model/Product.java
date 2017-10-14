@@ -110,6 +110,7 @@ public class Product {
         this.MSRP = MSRP;
     }
 
+    // for optional usage
     @Override
     public String toString() {
         return "Product{" +

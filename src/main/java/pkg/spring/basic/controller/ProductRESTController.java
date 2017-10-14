@@ -2,14 +2,23 @@ package pkg.spring.basic.controller;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import pkg.spring.basic.dao.ProductDAOjdbc;
 import pkg.spring.basic.model.Product;
 import pkg.spring.basic.service.ProductService;
 
 import javax.annotation.PreDestroy;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ArIF on 26-Apr-17.
@@ -40,7 +49,6 @@ public class ProductRESTController {
     /*  Test Rest   */
     @RequestMapping("/dd")
     public String welcome() {
-        //productDAOjdbc.addProduct(new Product("E01", "Smith", "Clerk", "ds", "ads", "wq",12, 12, 2.1));
         return "Welcome to RestTemplate Example.";
     }
 
@@ -49,18 +57,14 @@ public class ProductRESTController {
     /*-----  C   -----*/
     /*  Create a new Product    */
     @PostMapping("/products")   // equals to "/products/" if was not defined at class lvl
-    public void addProduct(@RequestBody Product product/*, HttpServletRequest request, HttpServletResponse response*/) {
-        if (product != null){
-            logger.info("REST - Create: "+ product);
-            productService.addProduct(product);
-            logger.info("Product saved successfully");
-            //productDAOjdbc.addProduct(product);
-        } else {
-            logger.info("REST - Nothing to Create !!");
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addProduct(@RequestBody Product product) {
+        logger.info("REST - Create: "+ product);
+        productService.addProduct(product);
+        logger.info("Product saved successfully");
+        //productDAOjdbc.addProduct(product);
 
         /*response.setHeader("1", "uno");
-
         //http://localhost:8080/spring-utility/person/1
         response.setHeader("Location", request.getRequestURL().append(product.getProductCode()).toString());*/
     }
@@ -70,6 +74,7 @@ public class ProductRESTController {
     /*-----  R   -----*/
     /*  Read a specific Product */
     @GetMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.FOUND)
     public Product findProductByID(@PathVariable String productId/*,
                                                 @RequestBody Product product*/) {
         logger.info("REST - Read: "+"/n by: "+productId);
@@ -79,16 +84,28 @@ public class ProductRESTController {
 
     /*  Read All Products    */
     //@JsonView
-    @GetMapping("/products")
+    /*@GetMapping("/products")
+    @ResponseStatus(HttpStatus.FOUND)
     public List<Product> findAllProducts() {
         return productService.findAllProducts();
+    }*/
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> findAllProducts() {
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cacheControl(CacheControl.noStore().sMaxAge(24, TimeUnit.HOURS))
+                .header("myHeader-1", "myValue-1")
+                .header("myHeader-2", "myValue-2")
+                .header("Access-Control-Max-Age","86400")
+                .body(productService.findAllProducts());
     }
-
 
 
     /*-----  U   -----*/
     /*  Update a product without specifying 'by which?'    */
     @PutMapping("/products")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateProduct(@RequestBody Product product) {
         //productDAOjdbc.updateProduct(product);
         logger.info("REST - Update: "+ product);
@@ -113,6 +130,7 @@ public class ProductRESTController {
     /*-----  D   -----*/
     /*  Delete a product    */
     @DeleteMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProductById(@PathVariable("productId") String productId) {
         //productDAOjdbc.removeProduct(productId);
         productService.removeProductById(productId);
@@ -120,6 +138,7 @@ public class ProductRESTController {
 
     /*  Delete all products    */
     @DeleteMapping("/products/")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllProducts() {
         productService.removeAllProducts();
     }

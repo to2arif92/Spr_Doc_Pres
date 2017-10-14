@@ -5,7 +5,7 @@ import pkg.spring.basic.model.Product;
 import java.util.List;
 
 /**
- * Created by ArIF on 26-Apr-17.
+ * Created by ArIF on 26-Apr-17.a
  */
 public interface ProductDAO {
     void addProduct(Product product);

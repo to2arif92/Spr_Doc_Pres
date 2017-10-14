@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    //@Transactional
+    //@Transactionala
     public List<Product> findProducts(String productId) {
         return null;
     }

@@ -92,7 +92,7 @@ public class ProductRESTController {
     @GetMapping("/products")
     public ResponseEntity<List<Product>> findAllProducts() {
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .cacheControl(CacheControl.noStore().sMaxAge(24, TimeUnit.HOURS))
                 .header("myHeader-1", "myValue-1")

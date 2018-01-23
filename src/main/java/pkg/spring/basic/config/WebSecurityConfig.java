@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    MyDBAuthenticationService myDBAauthenticationService;
+    MyDBAuthenticationService myDBAuthenticationService;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication().withUser("admin1").password("12345").roles("USER, ADMIN");
 
         // For User in database.
-        auth.userDetailsService(myDBAauthenticationService);
+        auth.userDetailsService(myDBAuthenticationService);
 
     }
 

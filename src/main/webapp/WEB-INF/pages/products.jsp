@@ -476,13 +476,11 @@
     var Territory = Backbone.Model.extend({});
 
     var columns = [{
-        name: "id", // The key of the model attribute
+        name: "productCode", // The key of the model attribute
         label: "ID", // The name to display in the header
         editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
         // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
-        cell: Backgrid.IntegerCell.extend({
-            orderSeparator: ''
-        })
+        cell: "string"
     }, {
         name: "productName",
         label: "Name",
@@ -534,7 +532,7 @@
 
     // Render the grid
         var $example2 = $("#example-2-result");
-        $example2.append(pageableGrid.render().el)
+        $example2.append(pageableGrid.render().el);
 
     // Initialize the paginator
         var paginator = new Backgrid.Extension.Paginator({

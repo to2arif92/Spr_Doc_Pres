@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Repository
 public class ProductDAOImpl implements ProductDAO {
+
     @Autowired
     private Logger logger;
 

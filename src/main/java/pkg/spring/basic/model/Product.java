@@ -8,8 +8,8 @@ import javax.persistence.Table;
 /**
  * Created by ArIF on 26-Apr-17.
  */
-@Entity // mark this class as Table & its field member as Columns
-@Table(name = "products")
+//@Entity // mark this class as Table & its field member as Columns
+//@Table(name = "products")
 public class Product {
     private String productCode;
     private String productName;

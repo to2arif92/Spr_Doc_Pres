@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import pkg.spring.basic.dao.UserDAO;
-import pkg.spring.basic.model.User;
+import pkg.spring.basic.model.auth.User;
 
 import java.util.List;
 

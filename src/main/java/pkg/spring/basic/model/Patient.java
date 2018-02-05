@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -16,7 +14,14 @@ import java.util.Date;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Patient {
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy= GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     private long patientID;
     private String fname;
     private String lName;

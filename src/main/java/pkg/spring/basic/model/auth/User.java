@@ -30,7 +30,7 @@ public class User {
     private Date lastSigned;
 
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) // exclude this field from Lombok
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "privilegeID")
     private UserPrivilege userPrivilege;
 }

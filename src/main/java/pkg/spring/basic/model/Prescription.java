@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import pkg.spring.basic.model.doctor.Doctor;
 
 import javax.persistence.*;
@@ -16,20 +17,27 @@ import java.util.Set;
 @Data
 public class Prescription {
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy= GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     private long prescriptionID;
 
     private Date thisVisit;
     private Date nextVisit;
 
     //int patientID;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patientID")
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) // exclude this field from Lombok
     private Patient patient;
 
     //int docID;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "docID")
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) // exclude this field from Lombok
     private Doctor doctor;

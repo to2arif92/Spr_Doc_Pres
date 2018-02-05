@@ -1,6 +1,7 @@
 package pkg.spring.basic.model.auth;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -9,7 +10,14 @@ import javax.persistence.*;
 @Data
 public class UserPrivilege {
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+            strategy= GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "privilegeID")
     private Long id;
 

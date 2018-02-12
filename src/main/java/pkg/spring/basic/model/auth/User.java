@@ -1,9 +1,6 @@
 package pkg.spring.basic.model.auth;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,8 +11,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "User")
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor
 public class User {
+    /*public User(String userName, String userPassword){
+        this.userName = userName;
+        this.userPassword = userPassword;
+    }*/
 
     @Id
     private String userName;
@@ -29,8 +30,8 @@ public class User {
 
     private Date lastSigned;
 
-    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) // exclude this field from Lombok
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) // exclude this field from Lombok
+    @ManyToOne/*(fetch = FetchType.LAZY)*/
     @JoinColumn(name = "privilegeID")
     private UserPrivilege userPrivilege;
 }

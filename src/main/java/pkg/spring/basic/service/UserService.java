@@ -1,13 +1,10 @@
-package pkg.spring.basic.dao;
+package pkg.spring.basic.service;
 
 import pkg.spring.basic.model.auth.User;
 
 import java.util.List;
 
-/**
- * Created by ArIF on 19-Jun-17.
- */
-public interface UserDAO {
+public interface UserService {
     void addUser(User user);
     void updateUser(User user);
     void removeUser(String userName);

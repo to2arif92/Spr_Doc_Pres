@@ -23,7 +23,7 @@ public class Expertise {
             name = "native",
             strategy = "native"
     )
-    private int expertiseID;
+    private long expertiseID;
     private String name;
 
     //private int docID;

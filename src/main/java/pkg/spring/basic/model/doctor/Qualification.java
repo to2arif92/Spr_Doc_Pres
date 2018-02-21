@@ -23,7 +23,7 @@ public class Qualification {
             name = "native",
             strategy = "native"
     )
-    private int qualID;
+    private long qualID;
     private String name;
 
     //private int docID;

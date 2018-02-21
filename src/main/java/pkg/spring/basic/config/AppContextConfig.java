@@ -104,10 +104,12 @@ public class AppContextConfig {
 
         properties.setProperty("hibernate.format_sql",
                 env.getProperty("hibernate.format_sql"));
-        properties.setProperty("hibernate.show_sql",
+        properties.setProperty(AvailableSettings.SHOW_SQL,
                 env.getProperty("hibernate.show_sql"));
         properties.setProperty(AvailableSettings.HBM2DDL_AUTO,
-                env.getProperty("hibernate.hbm2ddl.auto"));
+                env.getProperty("hibernate.hbm2ddl.auto"));/*
+        properties.setProperty(AvailableSettings.STORAGE_ENGINE,
+                env.getProperty("hibernate.dialect.storage_engine"));*/
         /*return new Properties() {
             {
                 *//*setProperty("hibernate.hbm2ddl.auto",

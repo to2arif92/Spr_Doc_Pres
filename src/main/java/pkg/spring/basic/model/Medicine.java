@@ -23,7 +23,7 @@ public class Medicine {
             name = "native",
             strategy = "native"
     )
-    private int medicineID;
+    private long medicineID;
     private String name;
 
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) // exclude this field from Lombok

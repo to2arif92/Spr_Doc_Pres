@@ -18,7 +18,7 @@ public class UserPrivilege {
             name = "native",
             strategy = "native"
     )
-    @Column(name = "privilegeID"/*, updatable = false, nullable = false*/)
+    @Column(name = "privilegeID", updatable = false)
     private Long id;
 
     @Column(updatable = false, nullable = false)

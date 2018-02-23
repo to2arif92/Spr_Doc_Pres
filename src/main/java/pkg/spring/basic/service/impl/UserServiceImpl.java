@@ -22,22 +22,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void addUser(User user) {
-        logger.info("Adding user: "+user.toString());
         userDAO.addUser(user);
+        logger.info("User added, User details="+user);
     }
 
     @Transactional
     @Override
     public void updateUser(User user) {
-        logger.info("Updating user: "+user.toString());
         userDAO.updateUser(user);
+        logger.info("User updated, User details="+user);
     }
 
     @Transactional
     @Override
     public void removeUser(String userName) {
-        logger.info("Removing user by username: "+userName);
         userDAO.removeUser(userName);
+        logger.info("User removed by username: "+userName);
     }
 
     @Transactional

@@ -35,22 +35,22 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public void addUser(User user) {
         sessionFactory.getCurrentSession().persist(user);
-        logger.info("User added, User details="+user);
+        logger.trace("Adding user: "+user.toString());
     }
 
     @Override
     public void updateUser(User user) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(user);
-        logger.info("User updated, User details="+user);
+        logger.trace("Updating user: "+user.toString());
     }
 
     @Override
     public void removeUser(String userName) {
         User user = getSession().load(User.class, userName);
         if (user != null){
+            logger.trace("Removing user by username: "+userName);
             getSession().delete(user);
-            logger.info("User:"+user+" is Removed");
         }
     }
 

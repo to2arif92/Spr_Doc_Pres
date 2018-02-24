@@ -2,6 +2,7 @@ package pkg.spring.basic.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.slf4j.Logger;
@@ -86,6 +87,18 @@ public class AppContextConfig {
         return dataSource;
     }
 
+    @Bean
+    public Flyway flyway(){
+        /* To work with [hibernate.hbm2ddl.auto = create-drop]; So far found no solution except to
+         drop the flyway history table before running the app so that it runs the scripts again */
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(getDataSource());
+        flyway.setBaselineOnMigrate(true);
+        //flyway.setCleanOnValidationError(true);
+        flyway.repair();
+        flyway.migrate();
+        return flyway;
+    }
     
 
     // to get rid instantiating JdbcTemplate elsewhere

@@ -53,5 +53,5 @@ Configutation:
               level: debug
         - name: org.hibernate
           level: info
-        - name: org.hibernate.type
+        - name: org.flywaydb
           level: info

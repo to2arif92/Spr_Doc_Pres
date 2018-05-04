@@ -9,7 +9,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Credit Login / Register Form a Responsive Widget Template :: w3layouts</title>
+    <title>Credit Login / Register Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Credit Login / Register Form Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements" />
@@ -31,6 +31,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <div class="main-agileits">
     <!--form-stars-here-->
     <div class="form-w3-agile">
+        <h2>Social Login</h2>
+
+        <a href="${pageContext.request.contextPath}/auth/facebook">Face
+            Book</a>
+        <br />
+        <a href="${pageContext.request.contextPath}/auth/google">Google</a>
+        <br />
+
         <h2>Please Login & Identify</h2>
         <!-- /login?error=true -->
         <c:if test="${param.error == 'true'}">
@@ -41,9 +49,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
             </div>
         </c:if>
-        <form action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
+        <form action="${pageContext.request.contextPath}/login/authenticate" method="post">
             <div class="form-sub-w3">
-                <input type="text" name="username" placeholder="Customer number or username " required="" />
+                <input type="text" name="username" placeholder="Username " required="" />
                 <div class="icon-w3">
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </div>
@@ -67,27 +75,39 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <div class="contact-form1">
         <div class="contact-w3-agileits">
             <h3>Register Form</h3>
-            <form action="#" method="post">
+            <form action="${pageContext.request.contextPath}/signup" method="get">
                 <div class="form-sub-w3ls">
-                    <input placeholder="User Name"  type="text" required="">
+                    <input name="username" placeholder="User Name"  type="text" required="">
                     <div class="icon-agile">
                         <i class="fa fa-user" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input placeholder="Email" class="mail" type="email" required="">
+                    <input name="firstName" placeholder="First name"  type="text" required="">
+                    <div class="icon-agile">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="form-sub-w3ls">
+                    <input name="lastName" placeholder="Last Name"  type="text" required="">
+                    <div class="icon-agile">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="form-sub-w3ls">
+                    <input name="email" placeholder="Email" class="mail" type="email" required="">
                     <div class="icon-agile">
                         <i class="fa fa-envelope-o" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input placeholder="Password"  type="password" required="">
+                    <input name="password" placeholder="Password"  type="password" required="">
                     <div class="icon-agile">
                         <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input placeholder="Confirm Password"  type="password" required="">
+                    <input name="passwordVerification" placeholder="Confirm Password"  type="password" required="">
                     <div class="icon-agile">
                         <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                     </div>

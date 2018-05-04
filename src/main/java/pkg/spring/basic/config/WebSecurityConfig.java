@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import pkg.spring.basic.authentication.MyDBAuthenticationService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.social.security.SpringSocialConfigurer;
+import pkg.spring.basic.security.LocalUserDetailsService;
 
 @Configuration
 // @EnableWebSecurity = @EnableWebMVCSecurity + Extra features
@@ -19,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    MyDBAuthenticationService myDBAuthenticationService;
+    LocalUserDetailsService localUserDetailsService;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,13 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication().withUser("admin1").password("12345").roles("USER, ADMIN");
 
         // For User in database.
-        auth.userDetailsService(myDBAuthenticationService);
+        auth.userDetailsService(localUserDetailsService);
 
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        /*TODO: enable csrf after understanding*/
         http.csrf().disable();
 
         // The pages does not require login
@@ -58,14 +61,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Config for Login Form
         http.authorizeRequests().and().formLogin()//
                 // Submit URL of login page.
-                .loginProcessingUrl("/j_spring_security_check") // Submit URL
+                .loginProcessingUrl("/login/authenticate") // Submit URL
                 .loginPage("/login")//
                 .defaultSuccessUrl("/admin")// URL after login
-                .failureUrl("/login?error=true")//
+                .failureUrl("/login?error=bad_credentials")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 // Config for Logout Page
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
 
+        // Spring Social Config
+        http.apply(new SpringSocialConfigurer()).signupUrl("/signup");
+
+    }
+
+    @Override
+    protected UserDetailsService userDetailsService() {
+        return localUserDetailsService;
     }
 }

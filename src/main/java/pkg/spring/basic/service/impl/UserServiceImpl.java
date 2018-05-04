@@ -2,9 +2,11 @@ package pkg.spring.basic.service.impl;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.connect.Connection;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pkg.spring.basic.dao.UserDAO;
+import pkg.spring.basic.dto.RegistrationForm;
 import pkg.spring.basic.model.auth.User;
 import pkg.spring.basic.service.UserService;
 
@@ -28,6 +30,22 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public void registerNewUser(RegistrationForm form) {
+        if (userDAO.findUserByUsername(form.getUserName()) != null){
+            logger.error("User with username: {} Already exist!", form.getUserName());
+            return;
+        }
+        userDAO.registerUser(form);
+    }
+
+    @Transactional
+    @Override
+    public String registerUserFromSocial(Connection<?> connection) {
+        return userDAO.registerUserFromSocial(connection);
+    }
+
+    @Transactional
+    @Override
     public void updateUser(User user) {
         userDAO.updateUser(user);
         logger.info("User updated, User details="+user);
@@ -42,16 +60,25 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User getUser(String userName) {
+    public User findUserByUsername(String userName) {
         logger.info("Retrieving User by username: "+userName);
-        return userDAO.getUser(userName);
+        return userDAO.findUserByUsername(userName);
     }
 
     @Transactional
     @Override
-    public String getUserRole(long user_privilegeID) {
+    public User findUserById(String Id) {
+        /*User user = userDAO.findUserById(Id);
+        logger.debug("Found user: {}", user);
+        return user;*/
+        return userDAO.findUserById(Id);
+    }
+
+    @Transactional
+    @Override
+    public String findUserRoleByPrivilegeId(long user_privilegeID) {
         logger.trace("Retrieving the role by id: "+user_privilegeID);
-        return userDAO.getUserRole(user_privilegeID);
+        return userDAO.findUserRoleByPrivilegeId(user_privilegeID);
     }
 
     @Transactional

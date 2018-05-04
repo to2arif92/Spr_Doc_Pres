@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,8 +26,13 @@ import java.util.Properties;
 /**
  * Created by ArIF on 28-Mar-17.
  */
+/*
+@Import(SocialConfig.class) // so that registering this class [ctx.register(AppContextConfig.class)] is enough?
+*/
 @Configuration
 //@configuration or @components e.g. @service spring beans to search for
+/*TODO: minimize scan
+* https://github.com/pkainulainen/spring-social-examples/blob/master/sign-in/spring-mvc-normal/src/main/java/net/petrikainulainen/spring/social/signinmvc/config/WebAppContext.java*/
 @ComponentScan("pkg.spring.basic")
 @EnableTransactionManagement
 // Load to Environment

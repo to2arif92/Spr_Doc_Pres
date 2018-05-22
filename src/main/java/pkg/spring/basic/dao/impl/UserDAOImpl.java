@@ -127,6 +127,7 @@ public class UserDAOImpl implements UserDAO{
         role.setName("ROLE_USER");
         roles.add(role);*/
         UserPrivilege privilege = new UserPrivilege();
+        // TODO: Decide user priviledge option here
         privilege.setId(2L); // USER
         user.setUserPrivilege(privilege);
         user.setLoginStatus(true);
@@ -154,7 +155,15 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User findUserById(String id) {
         logger.trace("Loading user by id: {}", id);
-        return getSession().load(User.class, id);
+
+        try {
+            User user = getSession().load(User.class, id);
+            logger.trace("User found: {}", user);
+            return user;
+        } catch (ObjectNotFoundException e){
+            logger.error("No user found!");
+            return null;
+        }
     }
 
     @Override

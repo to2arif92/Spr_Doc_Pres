@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         // The pages does not require login
-        http.authorizeRequests().antMatchers("/", "/welcome", "/login", "/logout").permitAll();
+        http.authorizeRequests().antMatchers("/", "/welcome", "/login", "/logout", "/signup").permitAll();
 
         // /userInfo page requires login as USER or ADMIN.
         // If no login, it will redirect to /login page.
@@ -71,7 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
 
         // Spring Social Config
-        http.apply(new SpringSocialConfigurer()).signupUrl("/signup");
+        http.apply(new SpringSocialConfigurer())
+                .signupUrl("/signup")
+                .postLoginUrl("/userInfo");
 
     }
 

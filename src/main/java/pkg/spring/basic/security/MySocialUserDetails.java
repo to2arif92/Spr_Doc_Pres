@@ -20,6 +20,7 @@ public class MySocialUserDetails implements SocialUserDetails {
 
     // Unique identifier for a class; Defined here to ensure same(Old/New) class is used during Serialization, is loaded during Deserialization
     private static final long serialVersionUID = 1L;
+    private List<GrantedAuthority> grantedAuthorities;
 
     @Autowired
     Logger logger;
@@ -32,10 +33,9 @@ public class MySocialUserDetails implements SocialUserDetails {
         System.out.println("MySocialUserDetails");
         this.user = user;
         //logger.debug("Social user found: {}", user);
-/*
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getUserPrivilege().getPrivilegeType());
         grantedAuthorities = new ArrayList<GrantedAuthority>();
-        grantedAuthorities.add(authority);*/
+        grantedAuthorities.add(authority);
     }
 
     @Override
@@ -45,21 +45,22 @@ public class MySocialUserDetails implements SocialUserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-        /* if User has ManyToMany relation with UserPrivilege
+        /*final List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        *//* if User has ManyToMany relation with UserPrivilege
         https://github.com/eugenp/tutorials/blob/master/spring-security-mvc-boot/src/main/java/org/baeldung/security/MyUserPrincipal.java
 
         for (final UserPrivilege privilege: user.getUserPrivilege()){
 
-        }*/
+        }*//*
         System.out.println("grantedAuthorities- created");
-        UserPrivilege u =user.getUserPrivilege();
+        *//*UserPrivilege u =user.getUserPrivilege().;
         System.out.println("Privilege:" + u.toString());
-        String pr = u.getPrivilegeType();
-        grantedAuthorities.add(new SimpleGrantedAuthority(pr));
+        String pr = u.getPrivilegeType();*//*
+        grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
         System.out.println("grantedAuthorities- mod");
 
-        return grantedAuthorities;
+        return grantedAuthorities;*/
+        return this.grantedAuthorities;
     }
 
     @Override

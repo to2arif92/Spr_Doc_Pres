@@ -13,9 +13,6 @@ import pkg.spring.basic.service.UserService;
 @Service
 @Transactional
 public class MySocialUserDetailsService implements SocialUserDetailsService {
-/* remove DAO & use service
-    @Autowired
-    private UserService userService;*/
     @Autowired
     private UserService userService;
 
@@ -30,14 +27,14 @@ public class MySocialUserDetailsService implements SocialUserDetailsService {
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
         //System.out.println("MySocialUserDetailsService");
-        User user = null;
+        /*User user = null;
         try {
             user = userService.findUserById(userId);
             logger.debug("Social user found on DB: {}", user.getId());
         } catch (Exception e){
             logger.error("Social user with id:{} is not found in the database", userId);
-        }
-        MySocialUserDetails userDetails = new MySocialUserDetails(user);
+        }*/
+        MySocialUserDetails userDetails = new MySocialUserDetails(userService.findUserById(userId));
         return userDetails;
     }
 }

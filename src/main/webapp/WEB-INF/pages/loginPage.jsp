@@ -33,8 +33,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <div class="form-w3-agile">
         <h2>Social Login</h2>
 
-        <a href="${pageContext.request.contextPath}/auth/facebook">Face
-            Book</a>
+        <form action="${pageContext.request.contextPath}/auth/facebook" method="post">
+            <button type="submit"><i>Facebook</i></button>
+        </form>
+        <%--<a href="">Face
+            Book</a>--%>
         <br />
         <a href="${pageContext.request.contextPath}/auth/google">Google</a>
         <br />

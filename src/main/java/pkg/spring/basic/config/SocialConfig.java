@@ -89,12 +89,14 @@ public class SocialConfig implements SocialConfigurer{
 
             /*Config to:
             * After login to Social > Automatically create corresponding User, if no user id could be mapped from a Connection(social) */
+            logger.trace("Trying to auto create account");
             ConnectionSignUp connectionSignUp = new AutoSocialSignUp(userService);
             //connectionSignUp.execute();
             jdbcUsersConnectionRepository.setConnectionSignUp(connectionSignUp);
         } else {
             /*Config to:
             * After login to Social > If User doesn't exists, Redirect to sign up page*/
+            logger.trace("Forwarding the social user:  to signup page");
             jdbcUsersConnectionRepository.setConnectionSignUp(null);
         }
 

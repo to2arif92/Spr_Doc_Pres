@@ -22,11 +22,12 @@ import java.time.LocalDateTime;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User {
 
+
     @Id
     @Column(nullable = false, unique = true)
     private String userName;
 
-    @NotBlank
+    /*@NotBlank
     @GeneratedValue(
             strategy= GenerationType.AUTO,
             generator="native"
@@ -34,7 +35,8 @@ public class User {
     @GenericGenerator(
             name = "native",
             strategy = "native"
-    )
+    )*/
+    //@Id
     @Column(updatable = false, nullable = false, unique = true)
     /*TODO: It should be long?.. fix with Social usage*/
     private String id;

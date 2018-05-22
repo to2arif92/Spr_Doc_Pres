@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
 import org.springframework.stereotype.Service;
 import pkg.spring.basic.service.UserService;
 
@@ -50,7 +52,7 @@ public class LocalUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        logger.debug("Loading user by username: {}", username);
+        logger.debug("Loading local user by username: {}", username);
 
         pkg.spring.basic.model.auth.User targetUser = null;
         try {
@@ -76,9 +78,9 @@ public class LocalUserDetailsService implements UserDetailsService {
 
         // Return to create instance of Principal/User that implements default UserDetails
         /*TODO: check if normal login works otherwise implement separate SocialDetails & Service class*/
-        return (UserDetails) new User(targetUser.getUserName(), //
-                targetUser.getUserPassword(),grantList);
-        /*return *//*(SocialUserDetails)*//* new SocialUser(targetUser.getUserName(), targetUser.getUserPassword(), grantList);*/
+//        return (UserDetails) new User(targetUser.getUserName(), //
+//                targetUser.getUserPassword(),grantList);
+        return (SocialUserDetails ) new SocialUser(targetUser.getUserName(), targetUser.getUserPassword(), grantList);
     }
 
     /* Here, username is stored on both User, User_Roles table

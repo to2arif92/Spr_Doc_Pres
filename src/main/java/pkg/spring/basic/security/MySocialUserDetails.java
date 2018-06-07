@@ -1,6 +1,7 @@
 package pkg.spring.basic.security;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,25 +18,29 @@ import java.util.List;
  Provides core/authenticated user information */
 @Transactional
 public class MySocialUserDetails implements SocialUserDetails {
+    //@Autowired
+    Logger logger;
 
     // Unique identifier for a class; Defined here to ensure same(Old/New) class is used during Serialization, is loaded during Deserialization
     private static final long serialVersionUID = 1L;
-    private List<GrantedAuthority> grantedAuthorities;
-
-    @Autowired
-    Logger logger;
 
     private User user;
-    //private List<GrantedAuthority> grantedAuthorities;
+    private List<GrantedAuthority> grantedAuthorities;
 
     public MySocialUserDetails(User user) {
-        //logger.trace("Building Social user by: {}"/*, user*/);
-        System.out.println("MySocialUserDetails");
         this.user = user;
-        //logger.debug("Social user found: {}", user);
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getUserPrivilege().getPrivilegeType());
+        logger = LoggerFactory.getLogger(this.getClass());
+        logger.debug("Building SocialUserDetails for the authorized user");
+
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+user.getUserPrivilege().getPrivilegeType());
         grantedAuthorities = new ArrayList<GrantedAuthority>();
         grantedAuthorities.add(authority);
+        /* if User has ManyToMany relation with UserPrivilege
+        https://github.com/eugenp/tutorials/blob/master/spring-security-mvc-boot/src/main/java/org/baeldung/security/MyUserPrincipal.java
+
+        for (final UserPrivilege privilege: user.getUserPrivilege()){
+
+        }*/
     }
 
     @Override
@@ -46,12 +51,7 @@ public class MySocialUserDetails implements SocialUserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         /*final List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-        *//* if User has ManyToMany relation with UserPrivilege
-        https://github.com/eugenp/tutorials/blob/master/spring-security-mvc-boot/src/main/java/org/baeldung/security/MyUserPrincipal.java
-
-        for (final UserPrivilege privilege: user.getUserPrivilege()){
-
-        }*//*
+        *//*
         System.out.println("grantedAuthorities- created");
         *//*UserPrivilege u =user.getUserPrivilege().;
         System.out.println("Privilege:" + u.toString());

@@ -106,6 +106,7 @@ public class MainController {
     /**
      * Processes the form submissions of the registration form.
      */
+    /*TODO: Tune for local sign-up also*/
     @PostMapping("/signup")
     public String registerUser(WebRequest request, Model model,
                                @ModelAttribute("userForm") @Validated RegistrationForm form,
@@ -126,19 +127,20 @@ public class MainController {
             model.addAttribute("errorMessage", "Error "+e.getMessage());
             return signupPage;
         }
+        System.out.println(form.getSignInProvider());
 
-        User registered = userService.findUserByUsername(form.getUserName());
+        User registeredUser = userService.findUserByUsername(form.getUserName());
         if (form.getSignInProvider() != null) {
-            ProviderSignInUtils providerSignInUtils //
-                    = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
+            ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
 
             // If the user is signing in by using a social provider, this method
             // call stores the connection to the UserConnection table.
             // Otherwise, this method does not do anything.
-            providerSignInUtils.doPostSignUp(registered.getId(), request);
+            providerSignInUtils.doPostSignUp(registeredUser.getId(), request);
         }
         // After register, Logs the user in.
-        SecurityUtil.logInUser(registered);
+        logger.info("Signing in the user");
+        SecurityUtil.logInUser(registeredUser);
 
         return "redirect:/userInfo";
     }
@@ -155,7 +157,7 @@ public class MainController {
 
         // After user login successfully.
         //String userName = principal.getName();
-        logger.info(principal.getName()+" with User Privilege is redirected to loginAfter URL");
+        logger.info(principal.getName()+" is redirected to loginAfter URL");
         return "userInfoPage";
     }
 

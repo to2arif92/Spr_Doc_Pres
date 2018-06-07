@@ -46,6 +46,10 @@ public class UserDAOImpl implements UserDAO{
         logger.trace("Adding user: "+user.toString());
     }
 
+    /**
+     * Register a user via Form submission
+     * @param registrationForm
+     */
     @Override
     public void registerUser(RegistrationForm registrationForm) {
         User user = buildUserByForm(registrationForm);
@@ -53,7 +57,11 @@ public class UserDAOImpl implements UserDAO{
         sessionFactory.getCurrentSession().persist(user);
     }
 
-
+    /**
+     * Auto Sign-Up a Social user
+     * @param connection    Data from provider's sign-in attempt
+     * @return  UserName of the newly created user
+     */
     @Override
     public String registerUserFromSocial(Connection<?> connection) {
         ConnectionKey key = connection.getKey();
@@ -61,8 +69,7 @@ public class UserDAOImpl implements UserDAO{
 
         UserProfile userProfile = connection.fetchUserProfile();
         String email = userProfile.getEmail();
-        /*If any user's email in the database is matched
-         with the sign-in attempt Social user's email
+        /*If any user's email in the database is matched with the sign-in attempted Social user's email
           then halt creating a new user*/
         User user = this.findUserByEmail(email);
         if (user != null){
@@ -85,6 +92,7 @@ public class UserDAOImpl implements UserDAO{
         logger.trace("Username to be used: {}", userName);
         // Populate user class with values
         user = new User();
+        // TODO: generate random password and afterwards send an email with the password and to change if he wants
         user.setId(id); user.setUserName(userName); user.setUserPassword("123456"); user.setFirstName(userProfile.getFirstName()); user.setLastName(userProfile.getLastName()); user.setEmail(email);
         logger.debug("Inserting user with: {}", user);
         getSession().persist(user);
@@ -118,16 +126,19 @@ public class UserDAOImpl implements UserDAO{
     private User buildUserByForm(RegistrationForm formDTO){
         logger.debug("Building User model from Submitted form");
         User user = new User();
-        user.setId(formDTO.getId());
+        //user.setId(formDTO.getId());
         user.setUserName(formDTO.getUserName());
         user.setUserPassword(formDTO.getPassword());
+        user.setFirstName(formDTO.getFirstName());
+        user.setLastName(formDTO.getLastName());
+        user.setEmail(formDTO.getEmail());
         /* when multiple privilege is there/ list
         final HashSet<Role> roles = new HashSet<Role>();
         Role role = new Role();
         role.setName("ROLE_USER");
         roles.add(role);*/
         UserPrivilege privilege = new UserPrivilege();
-        // TODO: Decide user priviledge option here
+        // Decide user privilege option here
         privilege.setId(2L); // USER
         user.setUserPrivilege(privilege);
         user.setLoginStatus(true);
@@ -157,7 +168,11 @@ public class UserDAOImpl implements UserDAO{
         logger.trace("Loading user by id: {}", id);
 
         try {
-            User user = getSession().load(User.class, id);
+            Query query = getSession().createQuery("from User u where u.id = :givenID");
+            query.setParameter("givenID", id);
+            User user = ( User ) query.getSingleResult();
+            /* Used defined query, instead of Hibernate load/ get; as they were generating where clause for PK only
+            User user = getSession().get(User.class, id);*/
             logger.trace("User found: {}", user);
             return user;
         } catch (ObjectNotFoundException e){
@@ -172,7 +187,14 @@ public class UserDAOImpl implements UserDAO{
 
         User user = null;
         try {
+            /* Used defined query, instead of Hibernate load/ get; as they were generating where clause for PK only
             user = getSession().load(User.class, userName);
+            */
+            Query query = getSession().createQuery("from User u where u.userName = :uName");
+            query.setParameter("uName", userName);
+
+            user = ( User ) query.getSingleResult();
+
             logger.trace("User Found: "+user);
             return user;
         } catch (Exception e){
@@ -187,7 +209,7 @@ public class UserDAOImpl implements UserDAO{
     public User findUserByEmail(String email) {
         logger.debug("Loading user by email: {}", email);
         try {
-            User user = getSession().load(User.class, email);
+            User user = getSession().get(User.class, email);
             logger.trace("User Found: "+user);
             return user;
         } catch (ObjectNotFoundException e){
@@ -208,7 +230,7 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> listUsers() {
-        List<User> userList = getSession().createQuery("from User").list();
+        List userList = getSession().createQuery("from User").list();
         logger.info("User list::"+userList.toString());
 
 

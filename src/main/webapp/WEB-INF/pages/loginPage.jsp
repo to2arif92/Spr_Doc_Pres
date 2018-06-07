@@ -78,7 +78,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <div class="contact-form1">
         <div class="contact-w3-agileits">
             <h3>Register Form</h3>
-            <form action="${pageContext.request.contextPath}/signup" method="get">
+            <form action="${pageContext.request.contextPath}/signup" method="post">
                 <div class="form-sub-w3ls">
                     <input name="username" placeholder="User Name"  type="text" required="">
                     <div class="icon-agile">

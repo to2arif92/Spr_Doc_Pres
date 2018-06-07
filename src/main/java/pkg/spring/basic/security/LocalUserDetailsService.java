@@ -77,10 +77,8 @@ public class LocalUserDetailsService implements UserDetailsService {
         }
 
         // Return to create instance of Principal/User that implements default UserDetails
-        /*TODO: check if normal login works otherwise implement separate SocialDetails & Service class*/
-//        return (UserDetails) new User(targetUser.getUserName(), //
-//                targetUser.getUserPassword(),grantList);
-        return (SocialUserDetails ) new SocialUser(targetUser.getUserName(), targetUser.getUserPassword(), grantList);
+        return new User(targetUser.getUserName(), targetUser.getUserPassword(), grantList);
+        //return (SocialUserDetails ) new SocialUser(targetUser.getUserName(), targetUser.getUserPassword(), grantList);
     }
 
     /* Here, username is stored on both User, User_Roles table

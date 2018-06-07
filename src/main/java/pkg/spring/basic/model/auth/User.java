@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Created by ArIF on 10-Jun-17.
@@ -21,8 +22,6 @@ import java.time.LocalDateTime;
 @Table(name = "User")
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User {
-
-
     @Id
     @Column(nullable = false, unique = true)
     private String userName;
@@ -35,11 +34,12 @@ public class User {
     @GenericGenerator(
             name = "native",
             strategy = "native"
-    )*/
+    )
+    @Column
+    private long Serial;*/
     //@Id
-    @Column(updatable = false, nullable = false, unique = true)
-    /*TODO: It should be long?.. fix with Social usage*/
-    private String id;
+    @Column(updatable = false, /*nullable = false, */unique = true)
+    private String id = UUID.randomUUID().toString();
 
     @NotBlank   // not Null or Empty
     @Column(nullable = false)

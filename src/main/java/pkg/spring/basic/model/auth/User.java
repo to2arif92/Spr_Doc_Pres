@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -22,6 +21,7 @@ import java.util.UUID;
 @Table(name = "User")
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User {
+    @NotBlank
     @Id
     @Column(nullable = false, unique = true)
     private String userName;

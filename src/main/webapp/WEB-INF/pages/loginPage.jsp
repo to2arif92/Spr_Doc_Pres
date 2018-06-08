@@ -76,23 +76,23 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </div>
 <div id="small-dialog1" class="mfp-hide">
     <div class="contact-form1">
-        <div class="contact-w3-agileits">
-            <h3>Register Form</h3>
-            <form action="${pageContext.request.contextPath}/signup" method="post">
+        <h3>Register Form</h3>
+        <form action="${pageContext.request.contextPath}/signup" method="post">
+            <div class="contact-w3-agileits">
                 <div class="form-sub-w3ls">
-                    <input name="username" placeholder="User Name"  type="text" required="">
+                    <input name="userName" placeholder="User Name" type="text" required="">
                     <div class="icon-agile">
                         <i class="fa fa-user" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input name="firstName" placeholder="First name"  type="text" required="">
+                    <input name="firstName" placeholder="First name" type="text" required="">
                     <div class="icon-agile">
                         <i class="fa fa-user" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input name="lastName" placeholder="Last Name"  type="text" required="">
+                    <input name="lastName" placeholder="Last Name" type="text" required="">
                     <div class="icon-agile">
                         <i class="fa fa-user" aria-hidden="true"></i>
                     </div>
@@ -104,24 +104,24 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input name="password" placeholder="Password"  type="password" required="">
+                    <input name="password" placeholder="Password" type="password" required="">
                     <div class="icon-agile">
                         <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="form-sub-w3ls">
-                    <input name="passwordVerification" placeholder="Confirm Password"  type="password" required="">
+                    <input name="passwordVerification" placeholder="Confirm Password" type="password" required="">
                     <div class="icon-agile">
                         <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                     </div>
                 </div>
-        </div>
-        <div class="login-check">
-            <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><p>I Accept Terms & Conditions</p></label>
-        </div>
-        <div class="submit-w3l">
-            <input type="submit" value="Register">
-        </div>
+            </div>
+            <div class="login-check">
+                <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><p>I Accept Terms & Conditions</p></label>
+            </div>
+            <div class="submit-w3l">
+                <input type="submit" value="Register">
+            </div>
         </form>
     </div>
 </div>

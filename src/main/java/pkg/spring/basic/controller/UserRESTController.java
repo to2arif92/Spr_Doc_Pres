@@ -17,6 +17,9 @@ import java.util.List;
         produces = {MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE}
 )*/
+/**
+ * @implNote Use status codes carefully otherwise browser/ js may not render/process the content
+ */
 public class UserRESTController {
     @Autowired
     private UserService userService;
@@ -28,7 +31,7 @@ public class UserRESTController {
     }
 
     @GetMapping("/all")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers(){
         return userService.listUsers();
     }

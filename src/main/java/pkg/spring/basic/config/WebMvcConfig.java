@@ -50,7 +50,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter{
         registry.addResourceHandler("/fonts/**").addResourceLocations("/fonts/");
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
         // {appContext}/js/x.js is now mapped with this path '/WEB-INF/resources/js/x.js'
-        registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
     }
 
     @Override

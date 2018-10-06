@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Admin Panel | Products | Categories</title>
+    <title>Admin Panel | Users</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -20,13 +20,13 @@
     <!-- Custom styling plus plugins -->
     <link href="css/ad/custom.css" rel="stylesheet">
     <link href="css/ad/icheck/flat/green.css" rel="stylesheet">
-    <%-- Backgrid --%>
+    <!-- Backgrid -->
     <link rel="stylesheet" href="css/backgrid/backgrid.css">
     <link rel="stylesheet" href="css/backgrid/backgrid-select-all.css">
     <link rel="stylesheet" href="css/backgrid/backgrid-paginator.css">
     <link rel="stylesheet" href="css/backgrid/backgrid-filter.css">
 
-    <script src="js/ad/jquery.min.js"></script>
+
 
     <!--[if lt IE 9]>
         <script src="js/ad/ie8-responsive-file-warning.js"></script>
@@ -128,7 +128,7 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="../tables.html">Active Users</a>
                                         </li>
-                                        <li><a href="users.jsp">All Users</a>
+                                        <li><a href="tables_dynamic.html">All Users</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -358,7 +358,7 @@
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Available Products in Stock <small>Sessions</small></h2>
+                                    <h2>Daily active users <small>Sessions</small></h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a href="#"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -446,7 +446,7 @@
             <div class="clearfix"></div>
             <div id="notif-group" class="tabbed_notifications"></div>
         </div>
-
+    <script src="js/ad/jquery.min.js"></script>
         <script src="js/ad/bootstrap.min.js"></script>
 
         <!-- chart js -->
@@ -473,90 +473,49 @@
     <script>
     $(function() {
 
-    var Territory = Backbone.Model.extend({});
-
     var columns = [{
-        name: "productCode", // The key of the model attribute
-        label: "ID", // The name to display in the header
+        name: "userName", // The key of the model attribute
+        label: "Username", // The name to display in the header
         editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
         // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
         cell: "string"
     }, {
-        name: "productName",
-        label: "Name",
+        name: "email",
+        label: "Email",
         // The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
         cell: "string" // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
     }, {
-        name: "productLine",
-        label: "Product Line",
+        name: "firstName",
+        label: "F Name",
         cell: "string"
     }, {
-        name: "productVendor",
-        label: "Vendor",
+        name: "lastName",
+        label: "L Name",
         cell: "string"
     }, {
-        name: "quantityInStock",
-        label: "InStock",
-        cell: "integer" // An integer cell is a number cell that displays humanized integers
-    }, {
-        name: "buyPrice",
-        label: "Price",
-        cell: "number" // Number cell type for floating point value, defaults to have a precision 2 decimal numbers
-    }, {
-        name: "msrp",
-        label: "MRSP",
-        cell: "number" // Renders the value in an HTML anchor element
+        name: "userPassword",
+        label: "Password",
+        cell: "string" // integer: An integer cell is a number cell that displays humanized integers
     }];
 
-        var PageableTerritories = Backbone.PageableCollection.extend({
+        var Territory = Backbone.Model.extend({});
+
+        var Territories = Backbone.Collection.extend({
             model: Territory,
-            url: "products.json",
-            state: {
-                pageSize: 15
-            },
-            mode: "client" // page entirely on the client side
+            url: "user/all.json"
         });
-
-        var pageableTerritories = new PageableTerritories();
-
-    // Set up a grid to use the pageable collection
-        var pageableGrid = new Backgrid.Grid({
-            columns: [{
-                // enable the select-all extension
-                name: "",
-                cell: "select-row",
-                headerCell: "select-all"
-            }].concat(columns),
-            collection: pageableTerritories
+        var territories = new Territories();
+        var grid = new Backgrid.Grid({
+            columns: columns,
+            collection: territories
         });
+        // Render the grid and attach the root to your HTML document
+        $("#example-2-result").append(grid.render().el);
 
-    // Render the grid
-        var $example2 = $("#example-2-result");
-        $example2.append(pageableGrid.render().el);
+// Fetch some countries from the url
+        territories.fetch({reset: true});
 
-    // Initialize the paginator
-        var paginator = new Backgrid.Extension.Paginator({
-            collection: pageableTerritories
-        });
 
-    // Render the paginator
-        $example2.after(paginator.render().el);
-
-    // Initialize a client-side filter to filter on the client
-    // mode pageable collection's cache.
-        var filter = new Backgrid.Extension.ClientSideFilter({
-            collection: pageableTerritories,
-            fields: ['productName', 'productVendor']
-        });
-
-    // Render the filter
-        $example2.before(filter.render().el);
-
-    // Add some space to the filter and move it to the right
-        $(filter.el).css({float: "right", margin: "20px"});
-
-    // Fetch some data
-        pageableTerritories.fetch({reset: true});
 
     });
     </script>

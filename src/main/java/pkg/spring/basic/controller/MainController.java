@@ -45,9 +45,10 @@ public class MainController {
     @RequestMapping("/*")
     public String index(Model model)
     {
+        logger.debug("Undefined/ Un-Authorized URL request!");
         logger.trace("Redirecting to Root path");
         //return "index";
-        return "loginPage"; //default page for now
+        return loginPage; //default page for now
     }
 
 
@@ -55,12 +56,12 @@ public class MainController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(Model model) {
-        return "products";
+        return "users";
     }
 
     @GetMapping("/login")
     public String loginPage(Model model ) {
-        return "loginPage";
+        return loginPage;
         //return "index";
     }
 

@@ -1,0 +1,23 @@
+table.backgrid thead{
+    background: rgba(52, 73, 94, 0.94);
+    color: #ECF0F1/*ECF0F1*/;
+}
+
+table.backgrid thead button, table.backgrid thead th{
+    background-color: rgba(52, 73, 94, 0);
+    border: none;
+    padding: .5em .32em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+}
+
+table.backgrid thead input[type="checkbox"] {
+    margin: .5em .32em;
+    font-size: 2em;
+}
+
+table.backgrid thead th{
+
+}

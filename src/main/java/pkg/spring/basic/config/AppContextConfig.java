@@ -168,7 +168,4 @@ public class AppContextConfig {
         transactionManager.setSessionFactory(sessionFactory);
         return transactionManager;
     }
-
-
-
 }
